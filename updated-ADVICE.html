@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Linux Mint Cinnamon — School Safe</title>
+
+  <!-- Tailwind CDN (school-safe) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Your Tailwind layer overrides -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-black text-green-100 font-mono overflow-hidden">
+
+<!-- LOGIN -->
+<div id="login" class="h-screen flex items-center justify-center bg-gradient-to-b from-emerald-700 to-emerald-900">
+  <div class="bg-neutral-900 p-6 rounded text-center shadow-2xl">
+    <div class="text-lg mb-4">Linux Mint 21 Cinnamon</div>
+    <button onclick="boot()"
+      class="bg-emerald-400 text-black px-4 py-2 rounded hover:bg-emerald-300">
+      Login
+    </button>
+  </div>
+</div>
+
+<!-- DESKTOP -->
+<div id="desktop" class="hidden h-screen w-screen relative">
+
+  <!-- PANEL -->
+  <div class="h-10 bg-neutral-800 flex items-center px-3 select-none">
+    <div onclick="toggleMenu()"
+      class="bg-emerald-400 text-black px-3 py-1 rounded cursor-pointer">
+      Menu
+    </div>
+    <div class="ml-3 text-sm">mint@mint</div>
+  </div>
+
+  <!-- MENU -->
+  <div id="menu"
+    class="hidden absolute top-10 left-2 bg-neutral-900 rounded p-2 shadow-xl">
+    <div onclick="newTerminal()" class="px-3 py-1 cursor-pointer hover:bg-emerald-400 hover:text-black rounded">
+      Terminal
+    </div>
+    <div onclick="openFiles()" class="px-3 py-1 cursor-pointer hover:bg-emerald-400 hover:text-black rounded">
+      Files
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ---------- STATE ---------- */
+let z = 10;
+let cwd = "/home/mint";
+let user = "mint";
+
+let fs = {
+  "/home/mint": {
+    "Documents": { type: "dir" },
+    "script.sh": { type: "file", perm: "-rwxr-xr-x", content: "echo Hello" }
+  }
+};
+
+/* ---------- BOOT ---------- */
+function boot() {
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("desktop").classList.remove("hidden");
+  newTerminal();
+  openFiles();
+}
+
+/* ---------- MENU ---------- */
+function toggleMenu() {
+  document.getElementById("menu").classList.toggle("hidden");
+}
+
+/* ---------- WINDOW SYSTEM ---------- */
+function makeWindow(title, x, y, contentHTML) {
+  const win = document.createElement("div");
+  win.className = "window absolute bg-neutral-900 rounded w-[640px]";
+  win.style.left = x + "px";
+  win.style.top = y + "px";
+  win.style.zIndex = ++z;
+
+  win.innerHTML = `
+    <div class="titlebar bg-emerald-400 text-black px-2 py-1 cursor-move rounded-t">
+      ${title}
+    </div>
+    <div class="p-2 bg-black text-green-400 h-[300px] overflow-y-auto">
+      ${contentHTML}
+    </div>
+  `;
+
+  document.body.appendChild(win);
+  drag(win);
+  return win;
+}
+
+function drag(win) {
+  const bar = win.querySelector(".titlebar");
+  bar.onmousedown = e => {
+    const ox = e.clientX - win.offsetLeft;
+    const oy = e.clientY - win.offsetTop;
+    document.onmousemove = ev => {
+      win.style.left = ev.clientX - ox + "px";
+      win.style.top = ev.clientY - oy + "px";
+    };
+    document.onmouseup = () => document.onmousemove = null;
+  };
+}
+
+/* ---------- TERMINAL ---------- */
+function newTerminal() {
+  const win = makeWindow(
+    "Terminal — mint@mint",
+    60,
+    80,
+    `<div id="term"></div>
+     <input id="cmd" class="w-full bg-black text-green-400 outline-none mt-1">`
+  );
+
+  const term = win.querySelector("#term");
+  const input = win.querySelector("#cmd");
+
+  term.innerHTML = "mint@mint:~$<br>";
+
+  input.onkeydown = e => {
+    if (e.key === "Enter") {
+      const c = input.value.trim();
+      term.innerHTML += `mint@mint:${cwd}$ ${c}<br>`;
+      exec(c, term);
+      input.value = "";
+      term.scrollTop = term.scrollHeight;
+    }
+  };
+}
+
+function exec(c, term) {
+  const a = c.split(" ");
+  switch (a[0]) {
+    case "ls":
+      term.innerHTML += Object.keys(fs[cwd] || {}).join(" ") + "<br>";
+      break;
+    case "pwd":
+      term.innerHTML += cwd + "<br>";
+      break;
+    case "whoami":
+      term.innerHTML += user + "<br>";
+      break;
+    case "touch":
+      fs[cwd][a[1]] = { type: "file", perm: "-rw-r--r--", content: "" };
+      refreshFiles();
+      break;
+    case "rm":
+      delete fs[cwd][a[1]];
+      refreshFiles();
+      break;
+    case "chmod":
+      if (fs[cwd][a[2]]) fs[cwd][a[2]].perm = "-rwxrwxrwx";
+      break;
+    case "sudo":
+      term.innerHTML += "sudo: simulated privileges granted<br>";
+      break;
+    case "apt":
+      term.innerHTML += "Reading package lists... Done (simulation)<br>";
+      break;
+    case "clear":
+      term.innerHTML = "";
+      break;
+    default:
+      term.innerHTML += "command not found<br>";
+  }
+}
+
+/* ---------- FILE MANAGER ---------- */
+function openFiles() {
+  const win = makeWindow(
+    "Files",
+    740,
+    80,
+    `<div id="files"></div>`
+  );
+  refreshFiles();
+}
+
+function refreshFiles() {
+  const f = document.getElementById("files");
+  if (!f) return;
+  f.innerHTML = `<b>${cwd}</b><br>`;
+  for (let x in fs[cwd]) {
+    f.innerHTML += `📄 ${x}<br>`;
+  }
+}
+</script>
+
+</body>
+</html>
