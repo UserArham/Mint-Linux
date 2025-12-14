@@ -12,4 +12,6 @@ It was not compatible with those devices by file system reachment or with phones
 The relationship with this newly made repo does not support older Samsung or Apple devices if it was not updated.
 However, if this was an phone from iOS 4/Android Honeycomb to iOS 5/Android Jellybean, you may use it.
 # Can you run inside Windows?
-Running type: It must be Windows 7 Proffessional or higher.
+Running type: It must be Windows 7 Professional or higher.
+# Linux Mint conclusion
+This simulation was made by NanoTech, as this was someday made with Svelte too.
