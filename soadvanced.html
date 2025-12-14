@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Linux Mint Ultimate School Simulator</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: monospace;
+  background: linear-gradient(#1e7f5c, #145a3a);
+  color: #eaffea;
+}
+#panel {
+  height: 40px;
+  background: #1b1b1b;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+#menu {
+  background: #2ecc71;
+  color: black;
+  padding: 5px 12px;
+  border-radius: 4px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+#desktop {
+  padding: 20px;
+}
+.window {
+  position: absolute;
+  background: #111;
+  border-radius: 6px;
+  padding: 8px;
+  width: 620px;
+}
+.titlebar {
+  background: #2ecc71;
+  color: black;
+  padding: 5px;
+  cursor: move;
+}
+.content {
+  margin-top: 5px;
+}
+input {
+  background: black;
+  color: #00ff00;
+  border: none;
+  width: 100%;
+  outline: none;
+}
+button {
+  background: #2ecc71;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.file {
+  cursor: pointer;
+}
+.lesson {
+  background: black;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="desktop">
+
+<!-- TERMINAL -->
+<div class="window" id="termWin" style="top:60px;left:60px;">
+  <div class="titlebar">Terminal — mint@school</div>
+  <div class="conten
