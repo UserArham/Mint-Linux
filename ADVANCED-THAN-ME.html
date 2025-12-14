@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Linux Mint Cinnamon — School Safe</title>
+<style>
+body{margin:0;font-family:monospace;background:#000;color:#eaffea}
+.hidden{display:none}
+#login{
+ height:100vh;display:flex;align-items:center;justify-content:center;
+ background:linear-gradient(#1e7f5c,#145a3a)
+}
+#loginBox{
+ background:#111;padding:20px;border-radius:6px
+}
+button{background:#2ecc71;border:none;padding:6px 12px;cursor:pointer}
+#panel{
+ height:40px;background:#1b1b1b;display:flex;align-items:center;padding:0 10px
+}
+#menuBtn{
+ background:#2ecc71;color:#000;padding:5px 12px;border-radius:4px;cursor:pointer
+}
+.window{
+ position:absolute;background:#111;border-radius:6px;width:640px
+}
+.titlebar{
+ background:#2ecc71;color:#000;padding:5px;cursor:move
+}
+.content{padding:8px}
+input{background:#000;color:#0f0;border:none;width:100%;outline:none}
+.menu{
+ position:absolute;background:#111;top:40px;left:10px;padding:10px;border-radius:6px
+}
+.menu div{cursor:pointer;padding:5px}
+.menu div:hover{background:#2ecc71;color:#000}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+ <div id="loginBox">
+  <div>Linux Mint 21 Cinnamon</div><br>
+  <button onclick="boot()">Login</button>
+ </div>
+</div>
+
+<!-- DESKTOP -->
+<div id="desktop" class="hidden">
+ <div id="panel">
+  <div id="menuBtn" onclick="toggleMenu()">Menu</div>
+  <div style="margin-left:10px">mint@mint</div>
+ </div>
+
+ <div id="menu" class="menu hidden">
+  <div onclick="newTerminal()">Terminal</div>
+  <div onclick="openFiles()">Files</div>
+ </div>
+</div>
+
+<script>
+let z=10;
+let cwd="/home/mint";
+let user="mint";
+
+let fs={
+ "/home/mint":{
+  "Documents":{perm:"drwxr-xr-x",files:{}},
+  "script.sh":{perm:"-rwxr-xr-x",content:"echo Hello"},
+ }
+};
+
+function boot(){
+ document.getElementById("login").classList.add("hidden");
+ document.getElementById("desktop").classList.remove("hidden");
+ newTerminal();
+ openFiles();
+}
+
+function toggleMenu(){
+ document.getElementById("menu").classList.toggle("hidden");
+}
+
+function makeWindow(title,x,y,html){
+ let w=document.createElement("div");
+ w.className="window";
+ w.style.left=x+"px";w.style.top=y+"px";w.style.zIndex=++z;
+ w.innerHTML=`<div class="titlebar">${title}</div><div class="content">$
