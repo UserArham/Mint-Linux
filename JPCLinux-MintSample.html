@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Linux Mint Simulator</title>
+<style>
+body {
+  margin: 0;
+  font-family: monospace;
+  background: #1e7f5c;
+  color: #eaffea;
+}
+#panel {
+  height: 40px;
+  background: #1b1b1b;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+#menu {
+  background: #2ecc71;
+  color: black;
+  padding: 5px 12px;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+#desktop {
+  padding: 20px;
+}
+#terminal {
+  background: black;
+  padding: 10px;
+  border-radius: 6px;
+  max-width: 700px;
+  height: 300px;
+  overflow-y: auto;
+}
+input {
+  background: black;
+  color: #00ff00;
+  border: none;
+  width: 100%;
+  outline: none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="desktop">
+<h2>Linux Mint 21 Cinnamon (School Simulator)</h2>
+<div id="terminal">
+<div>mint@school:~$</div>
+<input id="cmd" autofocus>
+</div>
+</div>
+
+<div id="panel">
+<div id="menu">Menu</div>
+<div>Linux Mint Simulator</div>
+</div>
+
+<script>
+const term = document.getElementById("terminal");
+const input = document.getElementById("cmd");
+
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    const c = input.value;
+    term.innerHTML += `<div>mint@school:~$ ${c}</div>`;
+    run(c);
+    input.value = "";
+    term.scrollTop = term.scrollHeight;
+  }
+});
+
+function run(c) {
+  let out = "";
+  if (c === "ls") out = "Documents Downloads Music Pictures";
+  else if (c === "pwd") out = "/home/mint";
+  else if (c === "whoami") out = "mint";
+  else if (c === "neofetch") out =
+`OS: Linux Mint 21
+DE: Cinnamon
+Kernel: 5.15
+Shell: bash`;
+  else if (c.startsWith("apt")) out = "Simulation mode: no real installs allowed";
+  else if (c === "clear") { term.innerHTML=""; return; }
+  else out = `Command not found: ${c}`;
+  term.innerHTML += `<div>${out}</div>`;
+}
+</script>
+
+</body>
+</html>
