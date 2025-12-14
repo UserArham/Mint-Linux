@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional small overrides */
+.window {
+  @apply shadow-2xl;
+}
+.titlebar {
+  @apply rounded-t cursor-move;
+}
+input {
+  @apply bg-black text-green-400 outline-none font-mono w-full;
+}
