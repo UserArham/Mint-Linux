@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Linux Mint Advanced School Simulator</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: monospace;
+  background: linear-gradient(#1e7f5c, #145a3a);
+  color: #eaffea;
+}
+#panel {
+  height: 40px;
+  background: #1b1b1b;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+#menu {
+  background: #2ecc71;
+  color: black;
+  padding: 5px 12px;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+#desktop {
+  padding: 20px;
+}
+.window {
+  background: #111;
+  border-radius: 6px;
+  padding: 8px;
+  width: 600px;
+}
+.titlebar {
+  background: #2ecc71;
+  color: black;
+  padding: 5px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+#terminal {
+  height: 260px;
+  overflow-y: auto;
+}
+input {
+  background: black;
+  color: #00ff00;
+  border: none;
+  width: 100%;
+  outline: none;
+}
+.lesson {
+  margin-top: 15px;
+  background: #000;
+  padding: 10px;
+  border-radius: 6px;
+  max-width: 600px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="desktop">
+
+<div class="window">
+  <div class="titlebar">Terminal — mint@school</div>
+  <div id="terminal">
+    <div>mint@school:~$</div>
+    <input id="cmd" autofocus>
+  </div>
+</div>
+
+<div class="lesson">
+<b>Lesson Mode (Teacher-Safe)</b><br>
+Try commands:<br>
+<code>ls</code>, <code>cd Documents</code>, <code>pwd</code><br>
+<code>mkdir test</code>, <code>touch file.txt</code><br>
+<code>cat file.txt</code>, <code>sudo apt install</code>
+</div>
+
+</div>
+
+<div id="panel">
+  <div id="menu">Menu</div>
+  <div>Linux Mint 21 Cinnamon — School Simulator</div>
+</div>
+
+<script>
+let cwd = "/home/mint";
+let fs = {
+  "/home/mint": ["Documents", "Downloads", "file.txt"],
+  "/home/mint/Documents": [],
+  "/home/mint/Downloads": []
+};
+
+const term = document.getElementById("terminal");
+const input = document.getElementById("cmd");
+
+function print(text) {
+  term.innerHTML += `<div>${text}</div>`;
+}
+
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    const cmd = input.value.trim();
+    print(`mint@school:${cwd}$ ${cmd}`);
+    run(cmd);
+    input.value = "";
+    term.scrollTop = term.scrollHeight;
+  }
+});
+
+function run(cmd) {
+  const args = cmd.split(" ");
+  switch (args[0]) {
+    case "ls":
+      print(fs[cwd]?.join(" ") || "");
+      break;
+
+    case "pwd":
+      print(cwd);
+      break;
+
+    case "cd":
+      let path = cwd + "/" + args[1];
+      if (fs[path]) cwd = path;
+      else print("No such directory");
+      break;
+
+    case "mkdir":
+      fs[cwd + "/" + args[1]] = [];
+      fs[cwd].push(args[1]);
+      break;
+
+    case "touch":
+      fs[cwd].push(args[1]);
+      break;
+
+    case "cat":
+      print("(empty file)");
+      break;
+
+    case "whoami":
+      print("mint");
+      break;
+
+    case "neofetch":
+      print
