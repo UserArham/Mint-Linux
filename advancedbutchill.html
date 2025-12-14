@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Linux Mint – School Safe</title>
+
+<style>
+body{
+ margin:0;
+ font-family:monospace;
+ background:linear-gradient(#1e7f5c,#145a3a);
+ color:#eaffea;
+}
+#panel{
+ height:40px;
+ background:#1b1b1b;
+ display:flex;
+ align-items:center;
+ padding:0 10px;
+}
+#menu{
+ background:#2ecc71;
+ color:black;
+ padding:5px 12px;
+ border-radius:4px;
+ margin-right:10px;
+}
+.window{
+ position:absolute;
+ background:#111;
+ border-radius:6px;
+ width:640px;
+}
+.titlebar{
+ background:#2ecc71;
+ color:black;
+ padding:5px;
+ cursor:move;
+}
+.content{
+ padding:8px;
+}
+input{
+ background:black;
+ color:#00ff00;
+ border:none;
+ width:100%;
+ outline:none;
+}
+#files div{
+ cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="window" id="term" style="top:60px;left:60px;">
+ <div class="titlebar">Terminal — mint@mint</div>
+ <div class="content" id="terminal">
+  <div>mint@mint:~$</div>
+  <input id="cmd" autofocus>
+ </div>
+</div>
+
+<div class="window" id="fm" style="top:80px;left:760px;">
+ <div class="titlebar">Files</div>
+ <div class="content" id="files"></div>
+</div>
+
+<div id="panel">
+ <div id="menu">Menu</div>
+ <div>Linux Mint 21 Cinnam
