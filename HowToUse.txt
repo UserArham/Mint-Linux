@@ -1,0 +1,5 @@
+ls
+pwd
+whoami
+neofetch
+apt install firefox
